@@ -21,13 +21,13 @@ public class PessoaService {
         return pessoaRepo.findById(cpf).get();
     }
 
-    public Pessoa save(Pessoa pessoa){
+    public Pessoa insert(Pessoa pessoa){
         return pessoaRepo.save(pessoa);
     }
 
-    public Pessoa edit(Pessoa pessoa){
-        Pessoa pessoaedit = pessoaRepo.findById(pessoa.getCpf()).get();
-        pessoaedit.setEmail(pessoa.getNome());
+    public Pessoa edit(String id , Pessoa pessoa){
+        Pessoa pessoaedit = pessoaRepo.findById(id).get();
+        pessoaedit.setNome(pessoa.getNome());
         pessoaedit.setEmail(pessoa.getEmail());
         pessoaedit.setTelefone(pessoa.getTelefone());
         return pessoaRepo.save(pessoaedit);
