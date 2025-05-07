@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.PostConstruct;
 import jdk.jfr.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,18 @@ public class PessoaController {
 
     @Autowired
     private PessoaService pessoaService;
+
+    @PostConstruct
+    private void popularPessoa(){
+        Pessoa p1 = new Pessoa("12345678900", "João da Silva", "joao@email.com", "11999990000");
+        Pessoa p2 = new Pessoa("98765432100", "Maria Oliveira", "maria@email.com", "11888880000");
+        Pessoa p3 = new Pessoa("11122233344", "Carlos Souza", "carlos@email.com", "11777770000");
+
+        pessoaService.insert(p1);
+        pessoaService.insert(p2);
+        pessoaService.insert(p3);
+
+    }
 
     @Operation(summary = "Achar TODOS Pessoa", description = "Achar todas da tabela Pessoa")
     @ApiResponses(
