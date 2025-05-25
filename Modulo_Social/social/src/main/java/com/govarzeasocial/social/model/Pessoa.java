@@ -16,14 +16,17 @@ public class Pessoa {
 
     private String telefone;
 
+    private String senha;
+
     public Pessoa() {
     }
 
-    public Pessoa(String cpf, String nome, String email, String telefone) {
+    public Pessoa(String cpf, String nome, String email, String telefone, String senha) {
         this.cpf = cpf;
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
+        this.senha = senha;
     }
 
     public String getCpf() {
@@ -56,5 +59,13 @@ public class Pessoa {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

@@ -2,6 +2,7 @@ package com.govarzeasocial.social.controller;
 
 import com.govarzeasocial.social.model.Pessoa;
 import com.govarzeasocial.social.service.PessoaService;
+import com.govarzeasocial.social.util.PasswordUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,9 +28,19 @@ public class PessoaController {
 
     @PostConstruct
     private void popularPessoa(){
-        Pessoa p1 = new Pessoa("12345678900", "João da Silva", "joao@email.com", "11999990000");
-        Pessoa p2 = new Pessoa("98765432100", "Maria Oliveira", "maria@email.com", "11888880000");
-        Pessoa p3 = new Pessoa("11122233344", "Carlos Souza", "carlos@email.com", "11777770000");
+        String teste = "123";
+        System.out.println("Teste senha");
+        System.out.println("Teste raw: " + teste);
+        System.out.println("Teste encoded " + PasswordUtil.encodeSenha(teste));
+        if (PasswordUtil.matches(teste, PasswordUtil.encodeSenha(teste))){
+            System.out.println("Senha CORRETA");
+        } else {
+            System.out.println("Senha INCORRETA");
+        }
+
+        Pessoa p1 = new Pessoa("12345678900", "João da Silva", "joao@email.com", "11999990000", PasswordUtil.encodeSenha("1234"));
+        Pessoa p2 = new Pessoa("98765432100", "Maria Oliveira", "maria@email.com", "11888880000", PasswordUtil.encodeSenha("12345"));
+        Pessoa p3 = new Pessoa("11122233344", "Carlos Souza", "carlos@email.com", "11777770000", PasswordUtil.encodeSenha("123456"));
 
         pessoaService.insert(p1);
         pessoaService.insert(p2);
