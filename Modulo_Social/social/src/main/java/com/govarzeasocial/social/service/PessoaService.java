@@ -18,7 +18,7 @@ public class PessoaService {
     }
 
     public Pessoa findById(String cpf){
-        return pessoaRepo.findById(cpf).get();
+        return pessoaRepo.findById(cpf).orElseThrow(null);
     }
 
     public Pessoa insert(Pessoa pessoa){
