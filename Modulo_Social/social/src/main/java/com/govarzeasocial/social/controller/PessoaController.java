@@ -71,6 +71,7 @@ public class PessoaController {
     )
     @GetMapping(value ="/{id}")
     public ResponseEntity<Pessoa> findById(@Parameter (description = "Cpf da Pessoa", required = true) @PathVariable String id){
+        //TODO Adicionar Mecanismos de exceções
         return ResponseEntity.ok().body(pessoaService.findById(id));
     }
 
