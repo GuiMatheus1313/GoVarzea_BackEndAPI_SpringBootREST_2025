@@ -1,6 +1,9 @@
 package com.govarzeasocial.social.model;
 
+import com.govarzeasocial.social.model.enums.Role;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 
 @Entity
@@ -18,15 +21,20 @@ public class Pessoa {
 
     private String senha;
 
+    //
+    @Enumerated(EnumType.STRING)
+    private Role tipoPerfil;
+
     public Pessoa() {
     }
 
-    public Pessoa(String cpf, String nome, String email, String telefone, String senha) {
+    public Pessoa(String cpf, String nome, String email, String telefone, String senha, Role role) {
         this.cpf = cpf;
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
         this.senha = senha;
+        this.tipoPerfil = role;
     }
 
     public String getCpf() {
@@ -67,5 +75,13 @@ public class Pessoa {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Role getTipoPerfil() {
+        return tipoPerfil;
+    }
+
+    public void setTipoPerfil(Role tipoPerfil) {
+        this.tipoPerfil = tipoPerfil;
     }
 }
