@@ -1,6 +1,11 @@
 package com.govarzeasocial.social.controller;
 
+import com.govarzeasocial.social.model.Dirigente;
+import com.govarzeasocial.social.model.Jogador;
 import com.govarzeasocial.social.model.Pessoa;
+import com.govarzeasocial.social.model.enums.Role;
+import com.govarzeasocial.social.repository.DirigenteRepo;
+import com.govarzeasocial.social.repository.JogadorRepo;
 import com.govarzeasocial.social.service.PessoaService;
 import com.govarzeasocial.social.util.PasswordUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,9 +30,16 @@ public class PessoaController {
 
     @Autowired
     private PessoaService pessoaService;
+    //Repo para população ao banco
+    @Autowired
+    private JogadorRepo jogadorRepo;
+
+    @Autowired
+    private DirigenteRepo dirigenteRepo;
 
     @PostConstruct
     private void popularPessoa(){
+
         String teste = "123";
         System.out.println("Teste senha");
         System.out.println("Teste raw: " + teste);
@@ -38,14 +50,34 @@ public class PessoaController {
             System.out.println("Senha INCORRETA");
         }
 
-        Pessoa p1 = new Pessoa("12345678900", "João da Silva", "joao@email.com", "11999990000", PasswordUtil.encodeSenha("1234"));
-        Pessoa p2 = new Pessoa("98765432100", "Maria Oliveira", "maria@email.com", "11888880000", PasswordUtil.encodeSenha("12345"));
-        Pessoa p3 = new Pessoa("11122233344", "Carlos Souza", "carlos@email.com", "11777770000", PasswordUtil.encodeSenha("123456"));
+        Pessoa p1 = new Pessoa("12345678900", "João da Silva", "joao@email.com", "11999990000", PasswordUtil.encodeSenha("1234"), Role.ROLE_JOGADOR);
+        Pessoa p2 = new Pessoa("98765432100", "Maria Oliveira", "maria@email.com", "11888880000", PasswordUtil.encodeSenha("12345"), Role.ROLE_JOGADOR);
+        Pessoa p3 = new Pessoa("11122233344", "Carlos Souza", "carlos@email.com", "11777770000", PasswordUtil.encodeSenha("123456"), Role.ROLE_DIRIGENTE);
 
+        // Criando especializações
+        Jogador jogador1 = new Jogador(
+                p1.getCpf(), p1.getNome(), p1.getEmail(), p1.getTelefone(), p1.getSenha(), p1.getTipoPerfil(),
+                "Jão", "10"
+        );
+        Jogador jogador2 = new Jogador(
+                p2.getCpf(), p2.getNome(), p2.getEmail(), p2.getTelefone(), p2.getSenha(), p2.getTipoPerfil(),
+                "Carlão", "9"
+        );
+
+        Dirigente dirigente = new Dirigente(
+                p3.getCpf(), p3.getNome(), p3.getEmail(), p3.getTelefone(), p3.getSenha(), p3.getTipoPerfil(),
+                "Presidente"
+        );
+
+        jogadorRepo.save(jogador1);
+        jogadorRepo.save(jogador2);
+        dirigenteRepo.save(dirigente);
+        /*
+        /*
         pessoaService.insert(p1);
         pessoaService.insert(p2);
         pessoaService.insert(p3);
-
+        */
     }
 
     @Operation(summary = "Achar TODOS Pessoa", description = "Achar todas da tabela Pessoa")
