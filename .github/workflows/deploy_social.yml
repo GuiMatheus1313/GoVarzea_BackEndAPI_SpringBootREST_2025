@@ -1,0 +1,65 @@
+name: Manual Deploy for modulo_social to Oracle Cloud VM
+
+on: #Formato Manual
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Build modulo_social with Maven
+        run: mvn clean package -pl modulo_social -am
+
+      - name: List target folder for debugging
+        run: ls -R modulo_social/target
+
+      - name: Check for .jar artifact in modulo_social
+        run: |
+          if [ ! -f modulo_social/target/*.jar ]; then
+            echo "Error: No .jar file found for modulo_social."
+            exit 1
+          fi
+
+      - name: Archive modulo_social artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: modulo_social-jar
+          path: modulo_social/target/*.jar
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download built artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: modulo_social-jar
+          path: target/
+
+      - name: Setup SSH private key
+        id: setup-key
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+        run: |
+          echo "$DEPLOY_KEY" > $HOME/key.pem
+          chmod 400 $HOME/key.pem
+
+      - name: Copy JAR to Oracle Cloud VM
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          source: "target/*.jar"
+          target: "/home/${{ secrets.DEPLOY_USER }/desktop/deployment/"
