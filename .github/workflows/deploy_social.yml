@@ -36,7 +36,7 @@ jobs:
       - name: Check for .jar artifact in modulo_social
         working-directory: Modulo_Social/social
         run: |
-          if [ ! -f Modulo_Social/social/target/*.jar ]; then
+          if [ ! -f target/*.jar ]; then
             echo "Error: No .jar file found for modulo_social."
             exit 1
           fi
