@@ -52,7 +52,8 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-
+    environment: Micro-Social #Inserindo o ambiente de variáveis 
+    
     steps:
       # Passo 1: Baixar o artefato que foi gerado no job de build
       - name: Download built artifact
