@@ -76,6 +76,6 @@ jobs:
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
-          key_path: $HOME/key.pem
+          key_path: /home/runner/key.pem
           source: "target/*.jar" # De onde pegar o .jar localmente (no runner)
           target: "/home/${{ secrets.DEPLOY_USER }}/deployment/"
