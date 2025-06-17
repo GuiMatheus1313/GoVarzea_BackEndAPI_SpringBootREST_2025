@@ -29,10 +29,12 @@ jobs:
 
       # Passo 4: Listar os arquivos da pasta target para debug (útil se der erro de build)
       - name: List target folder for debugging
+        working-directory: Modulo_Social/social
         run: ls -R target/
 
       # Passo 5: Verificar se o .jar foi realmente gerado
       - name: Check for .jar artifact in modulo_social
+        working-directory: Modulo_Social/social
         run: |
           if [ ! -f Modulo_Social/social/target/*.jar ]; then
             echo "Error: No .jar file found for modulo_social."
