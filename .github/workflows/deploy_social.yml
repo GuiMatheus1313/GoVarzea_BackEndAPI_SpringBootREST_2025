@@ -24,18 +24,17 @@ jobs:
 
       # Passo 3: Buildar apenas o módulo `modulo_social` com o Maven
       - name: Build modulo_social with Maven
-        run: |
-          cd Modulo_Social/social
-          mvn clean package
+        working-directory: Modulo_Social/social
+        run: mvn clean package
 
       # Passo 4: Listar os arquivos da pasta target para debug (útil se der erro de build)
       - name: List target folder for debugging
-        run: ls -R modulo_social/social/target
+        run: ls -R /target
 
       # Passo 5: Verificar se o .jar foi realmente gerado
       - name: Check for .jar artifact in modulo_social
         run: |
-          if [ ! -f modulo_social/social/target/*.jar ]; then
+          if [ ! -f Modulo_Social/social/target/*.jar ]; then
             echo "Error: No .jar file found for modulo_social."
             exit 1
           fi
@@ -45,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: modulo_social-jar
-          path: modulo_social/social/target/*.jar
+          path: Modulo_Social/social/target/*.jar
 
   # Segundo job: Fazer o deploy na VM UbuntuCloudTest
   deploy:
