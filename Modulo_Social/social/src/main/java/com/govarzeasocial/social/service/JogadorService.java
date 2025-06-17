@@ -1,6 +1,7 @@
 package com.govarzeasocial.social.service;
 
 import com.govarzeasocial.social.model.Jogador;
+import com.govarzeasocial.social.model.Pessoa;
 import com.govarzeasocial.social.repository.JogadorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,5 +25,18 @@ public class JogadorService {
     public Jogador findById(String cpf) {
         return jogadorRepo.findById(cpf)
                 .orElseThrow(() -> new RuntimeException("Jogador não encontrado com CPF: " + cpf));
+    }
+
+    public Jogador edit(String id , Jogador jogador){
+        Jogador jogadoredit = jogadorRepo.findById(id).get();
+        jogadoredit.setNumeroCamisa(jogador.getNumeroCamisa());
+        jogadoredit.setApelido(jogador.getApelido());
+        return jogadorRepo.save(jogadoredit);
+
+    }
+
+    public String delete(String cpf){
+        jogadorRepo.deleteById(cpf);
+        return "Jogador deletado com sucesso";
     }
 }

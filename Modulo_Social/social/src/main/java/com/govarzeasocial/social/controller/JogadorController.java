@@ -47,11 +47,37 @@ public class JogadorController {
     @Operation(summary = "Cadastra um novo jogador")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "jogador criado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos")
+            @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+
     })
     @PostMapping
     public ResponseEntity<Jogador> insert(@RequestBody Jogador jogador) {
         return ResponseEntity.ok(jogadorService.insert(jogador));
+    }
+
+    @Operation(summary = "Atualiza um jogador existente", description = "Requer autoridade JOGADOR")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Jogador atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Jogador não encontrado"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+            @ApiResponse(responseCode = "403", description = "Acesso proibido - sem permissão")
+    })
+    @PreAuthorize("hasAuthority('JOGADOR')")
+    @PutMapping("/{cpf}")
+    public ResponseEntity<Jogador> update(@PathVariable String cpf, @RequestBody Jogador jogador) {
+        return ResponseEntity.ok(jogadorService.edit(cpf, jogador));
+    }
+
+    @Operation(summary = "Exclui um jogador existente", description = "Requer autoridade JOGADOR")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Jogador excluído com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Jogador não encontrado"),
+            @ApiResponse(responseCode = "403", description = "Acesso proibido - sem permissão")
+    })
+    @PreAuthorize("hasAuthority('JOGADOR')")
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<String> delete(@PathVariable String cpf) {
+        return ResponseEntity.ok().body(jogadorService.delete(cpf));
     }
 
 
