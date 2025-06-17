@@ -29,7 +29,7 @@ jobs:
 
       # Passo 4: Listar os arquivos da pasta target para debug (útil se der erro de build)
       - name: List target folder for debugging
-        run: ls -R /target
+        run: ls -R target/
 
       # Passo 5: Verificar se o .jar foi realmente gerado
       - name: Check for .jar artifact in modulo_social
