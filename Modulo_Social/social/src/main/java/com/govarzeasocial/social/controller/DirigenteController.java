@@ -1,6 +1,7 @@
 package com.govarzeasocial.social.controller;
 
 import com.govarzeasocial.social.model.Dirigente;
+import com.govarzeasocial.social.model.Jogador;
 import com.govarzeasocial.social.service.DirigenteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -51,5 +52,30 @@ public class DirigenteController {
     @PostMapping
     public ResponseEntity<Dirigente> insert(@RequestBody Dirigente dirigente) {
         return ResponseEntity.ok(dirigenteService.insert(dirigente));
+    }
+
+    @Operation(summary = "Atualiza um dirigente existente", description = "Requer autoridade DIRIGENTE")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dirigente atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Dirigente não encontrado"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+            @ApiResponse(responseCode = "403", description = "Acesso proibido - sem permissão")
+    })
+    @PreAuthorize("hasAuthority('DIRIGENTE')")
+    @PutMapping("/{cpf}")
+    public ResponseEntity<Dirigente> update(@PathVariable String cpf, @RequestBody Dirigente dirigente) {
+        return ResponseEntity.ok(dirigenteService.edit(cpf, dirigente));
+    }
+
+    @Operation(summary = "Exclui um dirigente existente", description = "Requer autoridade DIRIGENTE")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Dirigente excluído com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Dirigente não encontrado"),
+            @ApiResponse(responseCode = "403", description = "Acesso proibido - sem permissão")
+    })
+    @PreAuthorize("hasAuthority('DIRIGENTE')")
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<String> delete(@PathVariable String cpf) {
+        return ResponseEntity.ok().body(dirigenteService.delete(cpf));
     }
 }
