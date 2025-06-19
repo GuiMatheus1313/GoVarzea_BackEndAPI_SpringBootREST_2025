@@ -50,22 +50,21 @@ public class PessoaController {
             System.out.println("Senha INCORRETA");
         }
 
-        Pessoa p1 = new Pessoa("12345678900", "João da Silva", "joao@email.com", "11999990000", PasswordUtil.encodeSenha("1234"), Role.ROLE_JOGADOR);
-        Pessoa p2 = new Pessoa("98765432100", "Maria Oliveira", "maria@email.com", "11888880000", PasswordUtil.encodeSenha("12345"), Role.ROLE_JOGADOR);
-        Pessoa p3 = new Pessoa("11122233344", "Carlos Souza", "carlos@email.com", "11777770000", PasswordUtil.encodeSenha("123456"), Role.ROLE_DIRIGENTE);
+        Pessoa p1 = new Pessoa("12345678900", "João da Silva", "joao@email.com", "11999990000", PasswordUtil.encodeSenha("1234"));
+        Pessoa p2 = new Pessoa("98765432100", "Maria Oliveira", "maria@email.com", "11888880000", PasswordUtil.encodeSenha("12345"));
+        Pessoa p3 = new Pessoa("11122233344", "Carlos Souza", "carlos@email.com", "11777770000", PasswordUtil.encodeSenha("123456"));
 
         // Criando especializações
         Jogador jogador1 = new Jogador(
-                p1.getCpf(), p1.getNome(), p1.getEmail(), p1.getTelefone(), p1.getSenha(), p1.getTipoPerfil(),
-                "Jão", "10"
+                p1.getCpf(), p1.getNome(), p1.getEmail(), p1.getTelefone(), p1.getSenha(), "Jão", "10"
         );
         Jogador jogador2 = new Jogador(
-                p2.getCpf(), p2.getNome(), p2.getEmail(), p2.getTelefone(), p2.getSenha(), p2.getTipoPerfil(),
+                p2.getCpf(), p2.getNome(), p2.getEmail(), p2.getTelefone(), p2.getSenha(),
                 "Carlão", "9"
         );
 
         Dirigente dirigente = new Dirigente(
-                p3.getCpf(), p3.getNome(), p3.getEmail(), p3.getTelefone(), p3.getSenha(), p3.getTipoPerfil(),
+                p3.getCpf(), p3.getNome(), p3.getEmail(), p3.getTelefone(), p3.getSenha(),
                 "Presidente"
         );
 

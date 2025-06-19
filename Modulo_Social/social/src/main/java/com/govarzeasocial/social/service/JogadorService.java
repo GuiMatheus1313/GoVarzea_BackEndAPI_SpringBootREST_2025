@@ -39,4 +39,8 @@ public class JogadorService {
         jogadorRepo.deleteById(cpf);
         return "Jogador deletado com sucesso";
     }
+
+    public boolean checkJogador(String cpf){
+        return jogadorRepo.findById(cpf).isPresent();
+    }
 }

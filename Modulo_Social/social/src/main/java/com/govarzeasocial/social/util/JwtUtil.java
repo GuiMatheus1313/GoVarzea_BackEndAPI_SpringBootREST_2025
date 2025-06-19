@@ -1,6 +1,7 @@
 package com.govarzeasocial.social.util;
 
 import com.govarzeasocial.social.model.Pessoa;
+import com.govarzeasocial.social.model.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,11 +20,11 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    public String generateToken(Pessoa pessoa){
+    public String generateToken(Pessoa pessoa, Role tipoPerfil){
         System.out.println("generateToken(-)");
         return Jwts.builder()
                 .setSubject(pessoa.getEmail()) //ID
-                .claim("role", pessoa.getTipoPerfil().name()) //Perfil de escolha
+                .claim("role", tipoPerfil) //Perfil de escolha
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(SignatureAlgorithm.HS256, secretKey)

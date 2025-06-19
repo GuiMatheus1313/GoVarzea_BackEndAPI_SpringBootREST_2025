@@ -12,8 +12,8 @@ public class Jogador extends Pessoa{
         super();
     }
 
-    public Jogador(String cpf, String nome, String email, String telefone, String senha, Role role, String apelido, String numeroCamisa) {
-        super(cpf, nome, email, telefone, senha, role);
+    public Jogador(String cpf, String nome, String email, String telefone, String senha, String apelido, String numeroCamisa) {
+        super(cpf, nome, email, telefone, senha);
         this.apelido = apelido;
         this.numeroCamisa = numeroCamisa;
     }

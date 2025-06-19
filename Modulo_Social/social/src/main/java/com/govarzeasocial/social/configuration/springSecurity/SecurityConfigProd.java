@@ -1,7 +1,6 @@
 package com.govarzeasocial.social.configuration.springSecurity;
 
 
-import com.govarzeasocial.social.service.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,12 +25,10 @@ public class SecurityConfigProd {
     //filtro
     private final JwtRequestFilter jwtRequestFilter;
     //token
-    private final CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    public SecurityConfigProd(JwtRequestFilter jwtRequestFilter, CustomUserDetailsService customUserDetailsService) {
+    public SecurityConfigProd(JwtRequestFilter jwtRequestFilter) {
         this.jwtRequestFilter = jwtRequestFilter;
-        this.customUserDetailsService = customUserDetailsService;
     }
 
     @Bean

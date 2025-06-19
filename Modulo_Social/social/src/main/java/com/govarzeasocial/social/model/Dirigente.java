@@ -11,8 +11,8 @@ public class Dirigente extends Pessoa {
         super();
     }
 
-    public Dirigente(String cpf, String nome, String email, String telefone, String senha, Role role, String cargo) {
-        super(cpf, nome, email, telefone, senha, role);
+    public Dirigente(String cpf, String nome, String email, String telefone, String senha, String cargo) {
+        super(cpf, nome, email, telefone, senha);
         this.cargo = cargo;
     }
 

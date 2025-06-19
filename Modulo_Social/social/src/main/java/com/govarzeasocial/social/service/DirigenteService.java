@@ -38,4 +38,8 @@ public class DirigenteService {
         dirigenteRepo.deleteById(cpf);
         return "Dirigente deletado com sucesso";
     }
+
+    public boolean checkDirigente(String cpf){
+        return dirigenteRepo.findById(cpf).isPresent();
+    }
 }

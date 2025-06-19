@@ -1,6 +1,9 @@
 package com.govarzeasocial.social.configuration.springSecurity;
 
-import com.govarzeasocial.social.service.security.CustomUserDetailsService;
+import com.govarzeasocial.social.model.Pessoa;
+import com.govarzeasocial.social.model.enums.Role;
+import com.govarzeasocial.social.repository.PessoaRepo;
+import com.govarzeasocial.social.service.PessoaService;
 import com.govarzeasocial.social.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -13,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,12 +28,13 @@ import java.util.List;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    public JwtRequestFilter(JwtUtil jwtUtil, CustomUserDetailsService customUserDetailsService) {
-        this.jwtUtil = jwtUtil;
-        this.customUserDetailsService = customUserDetailsService;
+    private PessoaRepo pessoaRepo;
+
+    @Autowired
+    public JwtRequestFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;;
     }
 
 
@@ -56,7 +61,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 System.out.println("Token inválido ou expirado: " + e.getMessage());
             }
         }
-        //VERIFICAR ROLE
+        
         if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
             try{
                 Claims claim = jwtUtil.extractClaims(jwtToken);
