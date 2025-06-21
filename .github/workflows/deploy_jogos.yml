@@ -1,0 +1,81 @@
+# Nome do workflow, que vai aparecer na aba "Actions" do GitHub
+name: Manual Deploy for modulo_jogos to Oracle Cloud VM
+
+# Evento que dispara esse workflow
+on: #Formato Manual
+  workflow_dispatch: 
+
+jobs:
+  # Primeiro job/Bloco: Fazer o build do módulo
+  build:
+    runs-on: ubuntu-latest # Ambiente da execução: um runner Ubuntu hospedado pelo GitHub
+    #Passos rodando dentro do runner
+    steps:
+       # Passo 1: Baixar o código fonte do repositório
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Passo 2: Configurar o Java (necessário para o Maven e o Spring Boot)
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      # Passo 3: Buildar apenas o módulo `modulo_social` com o Maven
+      - name: Build modulo_jogos with Maven
+        working-directory: Modulo_Jogos/jogos
+        run: mvn clean package
+
+      # Passo 4: Listar os arquivos da pasta target para debug (útil se der erro de build)
+      - name: List target folder for debugging
+        working-directory: Modulo_Jogos/jogos
+        run: ls -R target/
+
+      # Passo 5: Verificar se o .jar foi realmente gerado
+      - name: Check for .jar artifact in modulo_social
+        working-directory: Modulo_Jogos/jogos
+        run: |
+          if [ ! -f target/*.jar ]; then
+            echo "Error: No .jar file found for modulo_jogos."
+            exit 1
+          fi
+
+      # Passo 6: Salvar o .jar como artefato para o próximo job (deploy)
+      - name: Archive modulo_jogos artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: modulo_jogos-jar
+          path: Modulo_Jogos/jogos/target/*.jar
+
+  # Segundo job: Fazer o deploy na VM UbuntuCloudTest
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: Social_Micro #Inserindo o ambiente de variáveis 
+    
+    steps:
+      # Passo 1: Baixar o artefato que foi gerado no job de build
+      - name: Download built artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: modulo_jogos-jar
+          path: target/
+          
+      # Passo 2: Criar o arquivo de chave SSH (privada) que será usado para conectar na VM
+      - name: Setup SSH private key
+        id: setup-key
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }} # Chave SSH em Secrets
+        run: |
+          echo "$DEPLOY_KEY" > $HOME/key.pem
+          chmod 400 $HOME/key.pem
+
+      - name: Copy JAR to Oracle Cloud VM UbuntuCloudTest
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key_path: /home/runner/key.pem
+          source: "target/*.jar" # De onde pegar o .jar localmente (no runner)
+          target: "/home/${{ secrets.DEPLOY_USER }}/deployment/"
