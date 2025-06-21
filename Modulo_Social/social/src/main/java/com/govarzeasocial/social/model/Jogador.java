@@ -18,6 +18,12 @@ public class Jogador extends Pessoa{
         this.numeroCamisa = numeroCamisa;
     }
 
+    public Jogador(String cpf, String nome, String email, String telefone, String senha, Role tipoPerfil, String apelido, String numeroCamisa) {
+        super(cpf, nome, email, telefone, senha, tipoPerfil);
+        this.apelido = apelido;
+        this.numeroCamisa = numeroCamisa;
+    }
+
     public String getApelido() {
         return apelido;
     }

@@ -16,6 +16,11 @@ public class Dirigente extends Pessoa {
         this.cargo = cargo;
     }
 
+    public Dirigente(String cpf, String nome, String email, String telefone, String senha, Role tipoPerfil, String cargo) {
+        super(cpf, nome, email, telefone, senha, tipoPerfil);
+        this.cargo = cargo;
+    }
+
     public String getCargo() {
         return cargo;
     }

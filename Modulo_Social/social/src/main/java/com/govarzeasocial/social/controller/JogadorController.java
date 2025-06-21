@@ -1,5 +1,6 @@
 package com.govarzeasocial.social.controller;
 
+import com.govarzeasocial.social.model.Dirigente;
 import com.govarzeasocial.social.model.Jogador;
 import com.govarzeasocial.social.service.JogadorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -78,6 +79,12 @@ public class JogadorController {
     @DeleteMapping("/{cpf}")
     public ResponseEntity<String> delete(@PathVariable String cpf) {
         return ResponseEntity.ok().body(jogadorService.delete(cpf));
+    }
+
+    @GetMapping("/buscaNome")
+    public ResponseEntity<List<Jogador>> encontraNome(@RequestParam(required = false) String nome){
+        List<Jogador> jogadores = jogadorService.findByNome(nome);
+        return ResponseEntity.ok().body(jogadores);
     }
 
 

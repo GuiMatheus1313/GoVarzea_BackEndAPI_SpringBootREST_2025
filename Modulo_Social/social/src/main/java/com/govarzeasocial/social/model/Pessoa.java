@@ -21,7 +21,6 @@ public class Pessoa {
     private String senha;
 
     @Transient
-    @JsonIgnore
     @Enumerated(EnumType.STRING)
     private Role tipoPerfil;
 
@@ -34,6 +33,15 @@ public class Pessoa {
         this.email = email;
         this.telefone = telefone;
         this.senha = senha;
+    }
+
+    public Pessoa(String cpf, String nome, String email, String telefone, String senha, Role tipoPerfil) {
+        this.cpf = cpf;
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.senha = senha;
+        this.tipoPerfil = tipoPerfil;
     }
 
     public String getCpf() {
@@ -76,4 +84,11 @@ public class Pessoa {
         this.senha = senha;
     }
 
+    public Role getTipoPerfil() {
+        return tipoPerfil;
+    }
+
+    public void setTipoPerfil(Role tipoPerfil) {
+        this.tipoPerfil = tipoPerfil;
+    }
 }

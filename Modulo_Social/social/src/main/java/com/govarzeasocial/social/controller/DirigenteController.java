@@ -78,4 +78,13 @@ public class DirigenteController {
     public ResponseEntity<String> delete(@PathVariable String cpf) {
         return ResponseEntity.ok().body(dirigenteService.delete(cpf));
     }
+
+
+    @GetMapping("/buscaNome")
+    public ResponseEntity<List<Dirigente>> encontraNome(@RequestParam(required = false) String nome){
+        List<Dirigente> dirigentes = dirigenteService.findByNome(nome);
+        return ResponseEntity.ok().body(dirigentes);
+    }
+
+
 }
