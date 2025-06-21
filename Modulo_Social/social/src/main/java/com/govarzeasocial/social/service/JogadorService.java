@@ -1,5 +1,6 @@
 package com.govarzeasocial.social.service;
 
+import com.govarzeasocial.social.model.Dirigente;
 import com.govarzeasocial.social.model.Jogador;
 import com.govarzeasocial.social.model.Pessoa;
 import com.govarzeasocial.social.repository.JogadorRepo;
@@ -25,6 +26,10 @@ public class JogadorService {
     public Jogador findById(String cpf) {
         return jogadorRepo.findById(cpf)
                 .orElseThrow(() -> new RuntimeException("Jogador não encontrado com CPF: " + cpf));
+    }
+
+    public List<Jogador> findByNome(String nome) {
+        return jogadorRepo.findByNomeContainingIgnoreCase(nome);
     }
 
     public Jogador edit(String id , Jogador jogador){

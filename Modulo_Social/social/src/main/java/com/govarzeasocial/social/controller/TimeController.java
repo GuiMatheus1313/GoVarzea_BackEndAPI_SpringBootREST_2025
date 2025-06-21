@@ -1,6 +1,8 @@
 package com.govarzeasocial.social.controller;
 
+import com.govarzeasocial.social.dto.TimeJogadoresResponseDTO;
 import com.govarzeasocial.social.model.Time;
+import com.govarzeasocial.social.model.TimeJogadoresPK;
 import com.govarzeasocial.social.service.TimeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -75,6 +77,24 @@ public class TimeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         return ResponseEntity.ok().body(timeService.delete(id));
+    }
+
+    @GetMapping("/listar-time-jogadores")
+    public ResponseEntity<List<TimeJogadoresResponseDTO>> listarTimesComJogadores() {
+        List<TimeJogadoresResponseDTO> lista = timeService.listarTimesComJogadores();
+        return ResponseEntity.ok(lista);
+    }
+
+    @PostMapping("/adicionar-jogador")
+    public ResponseEntity<String> adicionarJogador(@RequestBody TimeJogadoresPK dto) {
+        timeService.adicionarJogadorAoTime(dto.getTimeIdPK(), dto.getJogadorCPFPK());
+        return ResponseEntity.ok("Jogador adicionado ao time com sucesso.");
+    }
+
+    @DeleteMapping("/remover-jogador")
+    public ResponseEntity<String> removerJogador(@RequestBody TimeJogadoresPK dto) {
+        timeService.removerJogadorDoTime(dto.getTimeIdPK(), dto.getJogadorCPFPK());
+        return ResponseEntity.ok("Jogador removido do time com sucesso.");
     }
 
 }

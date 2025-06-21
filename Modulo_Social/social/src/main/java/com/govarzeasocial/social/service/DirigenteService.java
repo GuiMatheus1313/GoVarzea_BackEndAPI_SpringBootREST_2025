@@ -27,6 +27,10 @@ public class DirigenteService {
                 .orElseThrow(() -> new RuntimeException("Dirigente não encontrado com CPF: " + cpf));
     }
 
+    public List<Dirigente> findByNome(String nome) {
+        return dirigenteRepo.findByNomeContainingIgnoreCase(nome);
+    }
+
     public Dirigente edit(String id , Dirigente dirigente){
         Dirigente dirigenteedit = dirigenteRepo.findById(id).get();
         dirigenteedit.setCargo(dirigente.getCargo());
@@ -38,6 +42,8 @@ public class DirigenteService {
         dirigenteRepo.deleteById(cpf);
         return "Dirigente deletado com sucesso";
     }
+
+
 
     public boolean checkDirigente(String cpf){
         return dirigenteRepo.findById(cpf).isPresent();
