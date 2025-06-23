@@ -1,9 +1,6 @@
 package com.govarzeasocial.social.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -15,18 +12,14 @@ public class Time {
     private String nome;
     private String localizacao;
     private LocalDate fundacao;
-    private String fkDirigente;
+
+    @ManyToOne
+    @JoinColumn(name = "fkDirigente", referencedColumnName = "fkCpf")
+    private Dirigente dirigente;
 
     public Time() {
     }
 
-    public Time(Long idTime, String nome, String localizacao, LocalDate fundacao, String fkDirigente) {
-        this.idTime = idTime;
-        this.nome = nome;
-        this.localizacao = localizacao;
-        this.fundacao = fundacao;
-        this.fkDirigente = fkDirigente;
-    }
 
     public Long getIdTime() {
         return idTime;
@@ -60,11 +53,11 @@ public class Time {
         this.fundacao = fundacao;
     }
 
-    public String getFkDirigente() {
-        return fkDirigente;
+    public Dirigente getDirigente() {
+        return dirigente;
     }
 
-    public void setFkDirigente(String fkDirigente) {
-        this.fkDirigente = fkDirigente;
+    public void setDirigente(Dirigente dirigente) {
+        this.dirigente = dirigente;
     }
 }

@@ -41,7 +41,7 @@ public class DirigenteController {
     @PreAuthorize("hasAuthority('DIRIGENTE')")
     @GetMapping("/{cpf}")
     public ResponseEntity<Dirigente> findById(@PathVariable String cpf) {
-        return ResponseEntity.ok(dirigenteService.findById(cpf));
+        return ResponseEntity.ok(dirigenteService.findByCpf(cpf));
     }
 
     @Operation(summary = "Cadastra um novo dirigente")

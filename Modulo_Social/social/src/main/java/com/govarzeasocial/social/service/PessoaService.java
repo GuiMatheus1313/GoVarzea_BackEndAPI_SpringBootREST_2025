@@ -17,8 +17,8 @@ public class PessoaService {
         return pessoaRepo.findAll();
     }
 
-    public Pessoa findById(String cpf){
-        return pessoaRepo.findById(cpf).orElseThrow(null);
+    public Pessoa findByCpf(String cpf){
+        return pessoaRepo.findByCpf(cpf);
     }
 
     public Pessoa insert(Pessoa pessoa){
@@ -26,7 +26,7 @@ public class PessoaService {
     }
 
     public Pessoa edit(String id , Pessoa pessoa){
-        Pessoa pessoaedit = pessoaRepo.findById(id).get();
+        Pessoa pessoaedit = pessoaRepo.findByCpf(id);
         pessoaedit.setNome(pessoa.getNome());
         pessoaedit.setEmail(pessoa.getEmail());
         pessoaedit.setTelefone(pessoa.getTelefone());
@@ -35,7 +35,8 @@ public class PessoaService {
     }
 
     public String delete(String cpf){
-        pessoaRepo.deleteById(cpf);
+        Pessoa pessoadb = pessoaRepo.findByCpf(cpf);
+        pessoaRepo.deleteById(pessoadb.getPessoaID());
         return "Pessoa deletada com sucesso";
     }
 

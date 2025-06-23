@@ -1,5 +1,6 @@
 package com.govarzeasocial.social.dto;
 
+import com.govarzeasocial.social.model.Dirigente;
 import com.govarzeasocial.social.model.Jogador;
 
 import java.time.LocalDate;
@@ -10,10 +11,21 @@ public class TimeJogadoresResponseDTO {
     private String nome;
     private String localizacao;
     private LocalDate fundacao;
-    private String fkDirigente;
+
+    private Dirigente fkDirigente;
+
     private List<Jogador> jogadores;
 
     public TimeJogadoresResponseDTO() {
+    }
+
+    public TimeJogadoresResponseDTO(Long idTime, String nome, String localizacao, LocalDate fundacao, Dirigente fkDirigente, List<Jogador> jogadores) {
+        this.idTime = idTime;
+        this.nome = nome;
+        this.localizacao = localizacao;
+        this.fundacao = fundacao;
+        this.fkDirigente = fkDirigente;
+        this.jogadores = jogadores;
     }
 
     public Long getIdTime() {
@@ -48,11 +60,11 @@ public class TimeJogadoresResponseDTO {
         this.fundacao = fundacao;
     }
 
-    public String getFkDirigente() {
+    public Dirigente getFkDirigente() {
         return fkDirigente;
     }
 
-    public void setFkDirigente(String fkDirigente) {
+    public void setFkDirigente(Dirigente fkDirigente) {
         this.fkDirigente = fkDirigente;
     }
 

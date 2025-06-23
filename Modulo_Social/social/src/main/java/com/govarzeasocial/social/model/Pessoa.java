@@ -5,11 +5,23 @@ import com.govarzeasocial.social.model.enums.Role;
 import jakarta.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Pessoa {
 
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
+    private Long pessoaID;
+
+    public Long getPessoaID() {
+        return pessoaID;
+    }
+
+    public void setPessoaID(Long pessoaID) {
+        this.pessoaID = pessoaID;
+    }
+
+    @Column(unique = true)
     private String cpf;
 
     private String nome;

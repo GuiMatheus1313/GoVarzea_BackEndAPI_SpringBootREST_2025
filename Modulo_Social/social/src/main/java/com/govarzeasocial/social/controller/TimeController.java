@@ -1,8 +1,12 @@
 package com.govarzeasocial.social.controller;
 
+import com.govarzeasocial.social.dto.TimeJogadoresPKDTO;
 import com.govarzeasocial.social.dto.TimeJogadoresResponseDTO;
+import com.govarzeasocial.social.model.Jogador;
 import com.govarzeasocial.social.model.Time;
 import com.govarzeasocial.social.model.TimeJogadoresPK;
+import com.govarzeasocial.social.repository.JogadorRepo;
+import com.govarzeasocial.social.service.JogadorService;
 import com.govarzeasocial.social.service.TimeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,6 +26,12 @@ import java.util.List;
 public class TimeController {
     @Autowired
     private TimeService timeService;
+
+    @Autowired
+    private JogadorService jogadorService;
+
+    @Autowired
+    private JogadorRepo jogadorRepo;
 
     @Operation(summary = "Listar todos os Times", description = "Retorna a lista de todos os times cadastrados.")
     @ApiResponses({
@@ -86,14 +96,14 @@ public class TimeController {
     }
 
     @PostMapping("/adicionar-jogador")
-    public ResponseEntity<String> adicionarJogador(@RequestBody TimeJogadoresPK dto) {
-        timeService.adicionarJogadorAoTime(dto.getTimeIdPK(), dto.getJogadorCPFPK());
+    public ResponseEntity<String> adicionarJogador(@RequestBody TimeJogadoresPKDTO dto) {
+        timeService.adicionarJogadorAoTime(dto.getTimeId(), dto.getJogadorCpf());
         return ResponseEntity.ok("Jogador adicionado ao time com sucesso.");
     }
 
     @DeleteMapping("/remover-jogador")
-    public ResponseEntity<String> removerJogador(@RequestBody TimeJogadoresPK dto) {
-        timeService.removerJogadorDoTime(dto.getTimeIdPK(), dto.getJogadorCPFPK());
+    public ResponseEntity<String> removerJogador(@RequestBody TimeJogadoresPKDTO dto) {
+        timeService.removerJogadorDoTime(dto.getTimeId(), dto.getJogadorCpf());
         return ResponseEntity.ok("Jogador removido do time com sucesso.");
     }
 

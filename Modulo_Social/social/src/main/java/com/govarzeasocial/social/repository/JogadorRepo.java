@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface JogadorRepo extends JpaRepository<Jogador, String> {
-    List<Jogador> findByNomeContainingIgnoreCase(String nome);
+public interface JogadorRepo extends JpaRepository<Jogador, Long> {
+    //List<Jogador> findByNomeContainingIgnoreCase(String nome);
+
+    List<Jogador> findAllByPessoa_NomeContainingIgnoreCase(String nome);
+    Jogador findByCpf(String cpf);
+
 }

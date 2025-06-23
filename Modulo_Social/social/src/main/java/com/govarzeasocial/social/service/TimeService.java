@@ -1,10 +1,7 @@
 package com.govarzeasocial.social.service;
 
 import com.govarzeasocial.social.dto.TimeJogadoresResponseDTO;
-import com.govarzeasocial.social.model.Jogador;
-import com.govarzeasocial.social.model.Time;
-import com.govarzeasocial.social.model.TimeJogadores;
-import com.govarzeasocial.social.model.TimeJogadoresPK;
+import com.govarzeasocial.social.model.*;
 import com.govarzeasocial.social.repository.TimeJogadoresRepo;
 import com.govarzeasocial.social.repository.TimeRepo;
 import jakarta.transaction.Transactional;
@@ -19,6 +16,9 @@ public class TimeService {
 
     @Autowired
     private TimeRepo timeRepo;
+
+    @Autowired
+    private DirigenteService dirigenteService;
 
     @Autowired
     private TimeJogadoresRepo timeJogadoresRepo;
@@ -36,6 +36,8 @@ public class TimeService {
     }
 
     public Time insert(Time time) {
+        Dirigente dirigentedb = dirigenteService.findByCpf(time.getDirigente().getCpf());
+        time.setDirigente(dirigentedb);
         return timeRepo.save(time);
     }
 
@@ -58,32 +60,35 @@ public class TimeService {
     @Transactional
     public void adicionarJogadorAoTime(Long timeId, String jogadorCpf) {
         Time time = findById(timeId);
-        Jogador jogador = jogadorService.findById(jogadorCpf);
-        //
-        TimeJogadoresPK pkTimeJogadores = new TimeJogadoresPK(time.getIdTime(), jogador.getCpf());
-        timeJogadoresRepo.save(new TimeJogadores(pkTimeJogadores));
-        //
+        Jogador jogador = jogadorService.findByCpf(jogadorCpf);
+
+        TimeJogadores relacao = new TimeJogadores(time, jogador);
+
+        timeJogadoresRepo.save(relacao);
+
+
     }
 
     @Transactional
     public void removerJogadorDoTime(Long timeId, String jogadorCpf) {
-        TimeJogadoresPK pkTimeJogadores = new TimeJogadoresPK(timeId, jogadorCpf);
+        Jogador jogador = jogadorService.findByCpf(jogadorCpf);
+        TimeJogadoresPK pk = new TimeJogadoresPK(timeId, jogador.getJogadorID());
 
-        if (!timeJogadoresRepo.existsById(pkTimeJogadores)) {
-            throw new RuntimeException("Associação Time x Jogador não encontrada para remoção.");
+        if (!timeJogadoresRepo.existsById(pk)) {
+            throw new RuntimeException("Relação Time x Jogador não encontrada.");
         }
 
-        timeJogadoresRepo.deleteById(pkTimeJogadores);
+        timeJogadoresRepo.deleteById(pk);
     }
 
     public List<TimeJogadoresResponseDTO> listarTimesComJogadores() {
         List<Time> times = timeRepo.findAll();
 
         return times.stream().map(time -> {
-            List<TimeJogadores> relacoes = timeJogadoresRepo.findByTimeJogadoresPK_TimeIdPK(time.getIdTime());
+            List<TimeJogadores> relacoes = timeJogadoresRepo.findByTime_IdTime(time.getIdTime());
 
             List<Jogador> jogadores = relacoes.stream()
-                    .map(rel -> jogadorService.findById(rel.getTimeJogadoresPK().getJogadorCPFPK()))
+                    .map(TimeJogadores::getJogador)
                     .collect(Collectors.toList());
 
             TimeJogadoresResponseDTO dto = new TimeJogadoresResponseDTO();
@@ -91,10 +96,11 @@ public class TimeService {
             dto.setNome(time.getNome());
             dto.setLocalizacao(time.getLocalizacao());
             dto.setFundacao(time.getFundacao());
-            dto.setFkDirigente(time.getFkDirigente());
+            dto.setFkDirigente(time.getDirigente());
             dto.setJogadores(jogadores);
 
             return dto;
         }).collect(Collectors.toList());
+
     }
 }

@@ -1,6 +1,5 @@
 package com.govarzeasocial.social.service;
 
-import com.govarzeasocial.social.model.Dirigente;
 import com.govarzeasocial.social.model.Jogador;
 import com.govarzeasocial.social.model.Pessoa;
 import com.govarzeasocial.social.repository.JogadorRepo;
@@ -15,7 +14,13 @@ public class JogadorService {
     @Autowired
     private JogadorRepo jogadorRepo;
 
+    @Autowired
+    private PessoaService pessoaService;
+
+
     public Jogador insert(Jogador jogador) {
+        Pessoa jogadordb = pessoaService.findByCpf(jogador.getCpf());
+        jogador.setPessoa(jogadordb);
         return jogadorRepo.save(jogador);
     }
 
@@ -23,17 +28,16 @@ public class JogadorService {
         return jogadorRepo.findAll();
     }
 
-    public Jogador findById(String cpf) {
-        return jogadorRepo.findById(cpf)
-                .orElseThrow(() -> new RuntimeException("Jogador não encontrado com CPF: " + cpf));
+    public Jogador findByCpf(String cpf) {
+        return jogadorRepo.findByCpf(cpf);
     }
 
     public List<Jogador> findByNome(String nome) {
-        return jogadorRepo.findByNomeContainingIgnoreCase(nome);
+        return jogadorRepo.findAllByPessoa_NomeContainingIgnoreCase(nome);
     }
 
     public Jogador edit(String id , Jogador jogador){
-        Jogador jogadoredit = jogadorRepo.findById(id).get();
+        Jogador jogadoredit = jogadorRepo.findByCpf(id);
         jogadoredit.setNumeroCamisa(jogador.getNumeroCamisa());
         jogadoredit.setApelido(jogador.getApelido());
         return jogadorRepo.save(jogadoredit);
@@ -41,11 +45,13 @@ public class JogadorService {
     }
 
     public String delete(String cpf){
-        jogadorRepo.deleteById(cpf);
+        Jogador jogadordb = jogadorRepo.findByCpf(cpf);
+        jogadorRepo.deleteById(jogadordb.getJogadorID());
         return "Jogador deletado com sucesso";
     }
 
     public boolean checkJogador(String cpf){
-        return jogadorRepo.findById(cpf).isPresent();
+        Jogador jogadordb = jogadorRepo.findByCpf(cpf);
+        return jogadorRepo.findById(jogadordb.getJogadorID()).isPresent();
     }
 }

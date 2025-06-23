@@ -9,6 +9,8 @@ import java.util.List;
 
 @Repository
 public interface TimeJogadoresRepo extends JpaRepository<TimeJogadores, TimeJogadoresPK> {
-    List<TimeJogadores> findByTimeJogadoresPK_TimeIdPK(Long timeIdPK);
+    List<TimeJogadores> findByTime_IdTime(Long idTime);
+
+    List<TimeJogadores> findByJogador_Cpf(String jogadorCpf);
 
 }

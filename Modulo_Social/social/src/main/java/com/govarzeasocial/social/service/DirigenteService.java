@@ -1,7 +1,7 @@
 package com.govarzeasocial.social.service;
 
 import com.govarzeasocial.social.model.Dirigente;
-import com.govarzeasocial.social.model.Jogador;
+import com.govarzeasocial.social.model.Pessoa;
 import com.govarzeasocial.social.repository.DirigenteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,38 +14,45 @@ public class DirigenteService {
     @Autowired
     private DirigenteRepo dirigenteRepo;
 
+    @Autowired
+    private PessoaService pessoaService;
+
     public Dirigente insert(Dirigente dirigente) {
+        Pessoa dirigentedb = pessoaService.findByCpf(dirigente.getCpf());
+        dirigente.setPessoa(dirigentedb);
         return dirigenteRepo.save(dirigente);
     }
 
     public List<Dirigente> findAll() {
+
         return dirigenteRepo.findAll();
     }
 
-    public Dirigente findById(String cpf) {
-        return dirigenteRepo.findById(cpf)
-                .orElseThrow(() -> new RuntimeException("Dirigente não encontrado com CPF: " + cpf));
+    public Dirigente findByCpf(String cpf) {
+        return dirigenteRepo.findByCpf(cpf);
     }
 
     public List<Dirigente> findByNome(String nome) {
-        return dirigenteRepo.findByNomeContainingIgnoreCase(nome);
+        return dirigenteRepo.findAllByPessoa_NomeContainingIgnoreCase(nome);
     }
 
     public Dirigente edit(String id , Dirigente dirigente){
-        Dirigente dirigenteedit = dirigenteRepo.findById(id).get();
+        Dirigente dirigenteedit = dirigenteRepo.findByCpf(id);
         dirigenteedit.setCargo(dirigente.getCargo());
         return dirigenteRepo.save(dirigenteedit);
 
     }
 
     public String delete(String cpf){
-        dirigenteRepo.deleteById(cpf);
+        Dirigente dirigentedb = dirigenteRepo.findByCpf(cpf);
+        dirigenteRepo.deleteById(dirigentedb.getDirigenteID());
         return "Dirigente deletado com sucesso";
     }
 
 
 
     public boolean checkDirigente(String cpf){
-        return dirigenteRepo.findById(cpf).isPresent();
+        Dirigente dirigentedb = dirigenteRepo.findByCpf(cpf);
+        return dirigenteRepo.findById(dirigentedb.getDirigenteID()).isPresent();
     }
 }

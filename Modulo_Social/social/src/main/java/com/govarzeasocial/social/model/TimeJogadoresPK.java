@@ -1,34 +1,48 @@
 package com.govarzeasocial.social.model;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.EmbeddedId;
+
+import java.util.Objects;
 
 @Embeddable
 public class TimeJogadoresPK {
-    private Long timeIdPK;
-    private String jogadorCPFPK;
+    private Long timeId;
+    private Long jogadorId;
 
     public TimeJogadoresPK() {
     }
 
-    public TimeJogadoresPK(Long timeIdPK, String jogadorCPFPK) {
-        this.timeIdPK = timeIdPK;
-        this.jogadorCPFPK = jogadorCPFPK;
+    public TimeJogadoresPK(Long timeId, Long jogadorId) {
+        this.timeId = timeId;
+        this.jogadorId = jogadorId;
     }
 
-    public Long getTimeIdPK() {
-        return timeIdPK;
+    public Long getTimeId() {
+        return timeId;
     }
 
-    public void setTimeIdPK(Long timeIdPK) {
-        this.timeIdPK = timeIdPK;
+    public void setTimeId(Long timeId) {
+        this.timeId = timeId;
     }
 
-    public String getJogadorCPFPK() {
-        return jogadorCPFPK;
+    public Long getJogadorId() {
+        return jogadorId;
     }
 
-    public void setJogadorCPFPK(String jogadorCPFPK) {
-        this.jogadorCPFPK = jogadorCPFPK;
+    public void setJogadorId(Long jogadorId) {
+        this.jogadorId = jogadorId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TimeJogadoresPK that = (TimeJogadoresPK) o;
+        return Objects.equals(timeId, that.timeId) && Objects.equals(jogadorId, that.jogadorId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(timeId, jogadorId);
     }
 }

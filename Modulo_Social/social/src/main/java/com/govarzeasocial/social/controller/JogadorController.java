@@ -1,6 +1,5 @@
 package com.govarzeasocial.social.controller;
 
-import com.govarzeasocial.social.model.Dirigente;
 import com.govarzeasocial.social.model.Jogador;
 import com.govarzeasocial.social.service.JogadorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,7 +41,7 @@ public class JogadorController {
     @PreAuthorize("hasAuthority('JOGADOR')")
     @GetMapping("/{cpf}")
     public ResponseEntity<Jogador> findById(@PathVariable String cpf) {
-        return ResponseEntity.ok(jogadorService.findById(cpf));
+        return ResponseEntity.ok(jogadorService.findByCpf(cpf));
     }
 
     @Operation(summary = "Cadastra um novo jogador")

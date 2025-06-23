@@ -1,30 +1,51 @@
 package com.govarzeasocial.social.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.govarzeasocial.social.model.enums.Role;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Torcedor {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
+    private Long torcedorID;
+
+
+
+    @Column(unique = true)
+    private String cpf;
+
     private String biografia;
 
-    @Id
-    private String fkCpf;
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "fkCpf")
+    @JsonIgnore
+    private Pessoa pessoa;
+
     public Torcedor() {
     }
 
-    public Torcedor(String biografia, String fkCpf) {
+    public Torcedor(String biografia, Pessoa pessoa) {
+        this.cpf = pessoa.getCpf();
         this.biografia = biografia;
-        this.fkCpf = fkCpf;
+        this.pessoa = pessoa;
     }
 
-    public String getFkCpf() {
-        return fkCpf;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setFkCpf(String fkCpf) {
-        this.fkCpf = fkCpf;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public Torcedor(String cpf, String biografia, Pessoa pessoa) {
+        this.cpf = cpf;
+        this.biografia = biografia;
+        this.pessoa = pessoa;
     }
 
     public String getBiografia() {
@@ -45,4 +66,20 @@ public class Torcedor {
     }
 
      */
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
+
+    public Long getTorcedorID() {
+        return torcedorID;
+    }
+
+    public void setTorcedorID(Long torcedorID) {
+        this.torcedorID = torcedorID;
+    }
 }

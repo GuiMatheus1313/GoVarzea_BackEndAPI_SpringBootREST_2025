@@ -11,7 +11,7 @@ public class LoginService {
     private PessoaService pessoaService;
 
     public boolean loginSimples(Pessoa pessoa){
-        Pessoa pessoaDb = pessoaService.findById(pessoa.getCpf());
+        Pessoa pessoaDb = pessoaService.findByCpf(pessoa.getCpf());
 
         if(pessoaDb == null){
             System.out.println("O usuário não existe no banco ainda...");

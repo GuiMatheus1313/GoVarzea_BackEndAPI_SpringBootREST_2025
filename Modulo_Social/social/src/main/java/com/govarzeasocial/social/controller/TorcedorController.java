@@ -1,5 +1,6 @@
 package com.govarzeasocial.social.controller;
 
+import com.govarzeasocial.social.model.Time;
 import com.govarzeasocial.social.model.Torcedor;
 import com.govarzeasocial.social.service.TorcedorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,11 @@ public class TorcedorController {
         return ResponseEntity.ok().body(torcedor);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Torcedor> update(@PathVariable String id, @RequestBody Torcedor torcerdor) {
+        Torcedor updatedTorcedor = torcedorService.edit(id, torcerdor);
+        return ResponseEntity.ok().body(updatedTorcedor);
+    }
 
     @GetMapping
     public ResponseEntity<List<Torcedor>> listarTodos() {
@@ -30,7 +36,7 @@ public class TorcedorController {
 
     @GetMapping("/{cpf}")
     public ResponseEntity<Torcedor> buscarPorCpf(@PathVariable String cpf) {
-        return ResponseEntity.ok(torcedorService.findById(cpf));
+        return ResponseEntity.ok(torcedorService.findByCpf(cpf));
     }
 
     @DeleteMapping("/{cpf}")
