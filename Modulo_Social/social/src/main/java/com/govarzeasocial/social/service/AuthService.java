@@ -58,7 +58,7 @@ public class AuthService {
 
             case ROLE_DIRIGENTE:
                 return dirigenteService.checkDirigente(cpf);
-
+                
             default:
                 return false;
         }
