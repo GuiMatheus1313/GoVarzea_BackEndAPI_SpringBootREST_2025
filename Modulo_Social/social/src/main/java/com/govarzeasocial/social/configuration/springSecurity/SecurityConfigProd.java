@@ -39,7 +39,7 @@ public class SecurityConfigProd {
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/auth").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/h2-console/**", "/v3/api-docs/**").permitAll() //Liberar para o banco?
+                .requestMatchers("/h2-console/**", "/v3/api-docs/**", "/v1/pessoa/popular").permitAll() //Liberar para o banco?
                 .anyRequest().authenticated()
                 .and()
                 .headers().frameOptions().disable() //Liberar o banco
