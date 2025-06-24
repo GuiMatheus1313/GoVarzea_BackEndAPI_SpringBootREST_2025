@@ -24,7 +24,12 @@ public class AuthService {
 
     @Autowired
     private JogadorService jogadorService;
+
+    @Autowired
     private DirigenteService dirigenteService;
+
+    @Autowired
+    private TorcedorService torcedorService;
 
 
 
@@ -58,7 +63,9 @@ public class AuthService {
 
             case ROLE_DIRIGENTE:
                 return dirigenteService.checkDirigente(cpf);
-                
+
+            case ROLE_TORCEDOR:
+                return torcedorService.checkTorcedor(cpf);
             default:
                 return false;
         }

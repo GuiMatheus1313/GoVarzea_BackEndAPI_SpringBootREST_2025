@@ -35,6 +35,10 @@ public class TimeService {
                 .orElseThrow(() -> new RuntimeException("Time não encontrado com ID: " + id));
     }
 
+    public List<Time> findByNome(String nome){
+        return timeRepo.findAllByNomeContainingIgnoreCase(nome);
+    }
+
     public Time insert(Time time) {
         Dirigente dirigentedb = dirigenteService.findByCpf(time.getDirigente().getCpf());
         time.setDirigente(dirigentedb);
@@ -56,6 +60,8 @@ public class TimeService {
         timeRepo.deleteById(id);
         return "Time deletado com sucesso.";
     }
+
+    //PARTE TIMEJOGADORES
 
     @Transactional
     public void adicionarJogadorAoTime(Long timeId, String jogadorCpf) {

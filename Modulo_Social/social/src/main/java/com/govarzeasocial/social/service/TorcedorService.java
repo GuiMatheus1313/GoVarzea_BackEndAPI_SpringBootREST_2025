@@ -31,6 +31,10 @@ public class TorcedorService {
         return torcedorRepository.findByCpf(cpf);
     }
 
+    public List<Torcedor> findByNome(String nome){
+        return torcedorRepository.findAllByPessoa_NomeContainingIgnoreCase(nome);
+    }
+
     @Transactional
     public Torcedor insert(Torcedor torcedor) {
         Pessoa torcerdb = pessoaService.findByCpf(torcedor.getCpf());
@@ -47,9 +51,15 @@ public class TorcedorService {
     }
 
     @Transactional
-    public void deleteById(String cpf) {
+    public String delete(String cpf) {
         Torcedor torcerdb = torcedorRepository.findByCpf(cpf);
         torcedorRepository.deleteById(torcerdb.getTorcedorID());
+        return "Torcedor deletado com sucesso!";
+    }
+
+    public boolean checkTorcedor(String cpf){
+        Torcedor torcedordb = torcedorRepository.findByCpf(cpf);
+        return torcedorRepository.findById(torcedordb.getTorcedorID()).isPresent();
     }
 
 }

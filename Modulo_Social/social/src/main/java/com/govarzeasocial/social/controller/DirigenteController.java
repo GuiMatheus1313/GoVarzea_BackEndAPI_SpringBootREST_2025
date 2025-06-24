@@ -26,7 +26,6 @@ public class DirigenteController {
             @ApiResponse(responseCode = "200", description = "Lista de dirigentes retornada com sucesso"),
             @ApiResponse(responseCode = "403", description = "Acesso proibido - sem permissão")
     })
-    @PreAuthorize("hasRole('DIRIGENTE')")
     @GetMapping
     public ResponseEntity<List<Dirigente>> findAll() {
         return ResponseEntity.ok(dirigenteService.findAll());
@@ -38,7 +37,6 @@ public class DirigenteController {
             @ApiResponse(responseCode = "404", description = "Dirigente não encontrado"),
             @ApiResponse(responseCode = "403", description = "Acesso proibido - sem permissão")
     })
-    @PreAuthorize("hasAuthority('DIRIGENTE')")
     @GetMapping("/{cpf}")
     public ResponseEntity<Dirigente> findById(@PathVariable String cpf) {
         return ResponseEntity.ok(dirigenteService.findByCpf(cpf));
@@ -81,7 +79,7 @@ public class DirigenteController {
 
 
     @GetMapping("/buscaNome")
-    public ResponseEntity<List<Dirigente>> encontraNome(@RequestParam(required = false) String nome){
+    public ResponseEntity<List<Dirigente>> findByNome(@RequestParam(required = false) String nome){
         List<Dirigente> dirigentes = dirigenteService.findByNome(nome);
         return ResponseEntity.ok().body(dirigentes);
     }

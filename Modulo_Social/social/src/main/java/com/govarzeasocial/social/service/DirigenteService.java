@@ -49,8 +49,6 @@ public class DirigenteService {
         return "Dirigente deletado com sucesso";
     }
 
-
-
     public boolean checkDirigente(String cpf){
         Dirigente dirigentedb = dirigenteRepo.findByCpf(cpf);
         return dirigenteRepo.findById(dirigentedb.getDirigenteID()).isPresent();

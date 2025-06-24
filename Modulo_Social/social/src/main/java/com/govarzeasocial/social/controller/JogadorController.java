@@ -26,7 +26,6 @@ public class JogadorController {
             @ApiResponse(responseCode = "200", description = "Lista de jogadores retornada com sucesso"),
             @ApiResponse(responseCode = "403", description = "Acesso proibido - sem permissão")
     })
-    @PreAuthorize("hasRole('JOGADOR')")
     @GetMapping
     public ResponseEntity<List<Jogador>> findAll() {
         return ResponseEntity.ok(jogadorService.findAll());
@@ -38,7 +37,6 @@ public class JogadorController {
             @ApiResponse(responseCode = "404", description = "Jogador não encontrado"),
             @ApiResponse(responseCode = "403", description = "Acesso proibido - sem permissão")
     })
-    @PreAuthorize("hasAuthority('JOGADOR')")
     @GetMapping("/{cpf}")
     public ResponseEntity<Jogador> findById(@PathVariable String cpf) {
         return ResponseEntity.ok(jogadorService.findByCpf(cpf));
@@ -80,6 +78,13 @@ public class JogadorController {
         return ResponseEntity.ok().body(jogadorService.delete(cpf));
     }
 
+    @Operation(summary = "Procurar Jogador pelo seu nome", description = "NÃO REQUER AUTORIDADE JOGADOR")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Jogadores encontrados com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida: nome não informado ou inválido"),
+            @ApiResponse(responseCode = "404", description = "Nenhum jogador encontrado com esse nome"),
+            @ApiResponse(responseCode = "500", description = "Erro interno ao buscar jogador")
+    })
     @GetMapping("/buscaNome")
     public ResponseEntity<List<Jogador>> encontraNome(@RequestParam(required = false) String nome){
         List<Jogador> jogadores = jogadorService.findByNome(nome);

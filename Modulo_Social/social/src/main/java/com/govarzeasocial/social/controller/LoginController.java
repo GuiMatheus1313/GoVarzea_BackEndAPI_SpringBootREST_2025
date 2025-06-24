@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/loginPessoa")
-@Tag(name = "Login", description = "Endpoints de Login")
+@Tag(name = "Login(DEPRECIADA)", description = "Endpoints de Login")
 public class LoginController {
     @Autowired
     private LoginService loginService;

@@ -37,6 +37,8 @@ public class PessoaController {
     @Autowired
     private DirigenteRepo dirigenteRepo;
     */
+
+
     @GetMapping("/popular")
     public void popularPessoa(){
         System.out.println("Populando BANCO(-)");

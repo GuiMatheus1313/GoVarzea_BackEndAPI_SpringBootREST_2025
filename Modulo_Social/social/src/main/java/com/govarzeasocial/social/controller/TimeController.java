@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,11 +56,25 @@ public class TimeController {
         return ResponseEntity.ok().body(timeService.findById(id));
     }
 
+    @Operation(summary = "Procurar Torcedor pelo seu nome", description = "NÃO REQUER AUTORIDADE TORCEDOR")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Torcedores encontrados com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida: nome não informado ou inválido"),
+            @ApiResponse(responseCode = "404", description = "Nenhum torcedor encontrado com esse nome"),
+            @ApiResponse(responseCode = "500", description = "Erro interno ao buscar torcedor")
+    })
+    @GetMapping("/buscaNome")
+    public ResponseEntity<List<Time>> findByNome(@RequestParam(required = false) String nome){
+        return ResponseEntity.ok().body(timeService.findByNome(nome));
+    }
+
+
     @Operation(summary = "Criar um novo Time", description = "Cadastra um novo Time.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Time criado com sucesso", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "500", description = "Erro interno", content = @Content)
     })
+    @PreAuthorize("hasAuthority('DIRIGENTE')")
     @PostMapping()
     public ResponseEntity<Time> insert(@RequestBody Time time) {
         Time novoTime = timeService.insert(time);
@@ -72,6 +87,7 @@ public class TimeController {
             @ApiResponse(responseCode = "404", description = "Time não encontrado", content = @Content),
             @ApiResponse(responseCode = "500", description = "Erro interno", content = @Content)
     })
+    @PreAuthorize("hasAuthority('DIRIGENTE')")
     @PutMapping("/{id}")
     public ResponseEntity<Time> update(@PathVariable Long id, @RequestBody Time time) {
         Time updatedTime = timeService.edit(id, time);
@@ -84,23 +100,47 @@ public class TimeController {
             @ApiResponse(responseCode = "404", description = "Time não encontrado", content = @Content),
             @ApiResponse(responseCode = "500", description = "Erro interno", content = @Content)
     })
+    @PreAuthorize("hasAuthority('DIRIGENTE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         return ResponseEntity.ok().body(timeService.delete(id));
     }
 
+    //PARTE TIMEJOGADOR
+
+    @Operation(summary = "Listar todos os times com seus jogadores")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de times com jogadores retornada com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro interno ao buscar times")
+    })
     @GetMapping("/listar-time-jogadores")
     public ResponseEntity<List<TimeJogadoresResponseDTO>> listarTimesComJogadores() {
         List<TimeJogadoresResponseDTO> lista = timeService.listarTimesComJogadores();
         return ResponseEntity.ok(lista);
     }
 
+    @Operation(summary = "Adicionar um jogador a um time")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Jogador adicionado ao time com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida (ex: ID de time ou CPF do jogador inválido)"),
+            @ApiResponse(responseCode = "404", description = "Time ou jogador não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Erro interno ao adicionar jogador ao time")
+    })
+    @PreAuthorize("hasAuthority('DIRIGENTE')")
     @PostMapping("/adicionar-jogador")
     public ResponseEntity<String> adicionarJogador(@RequestBody TimeJogadoresPKDTO dto) {
         timeService.adicionarJogadorAoTime(dto.getTimeId(), dto.getJogadorCpf());
         return ResponseEntity.ok("Jogador adicionado ao time com sucesso.");
     }
 
+    @Operation(summary = "Remover um jogador de um time")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Jogador removido do time com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida (ex: ID de time ou CPF do jogador inválido)"),
+            @ApiResponse(responseCode = "404", description = "Time ou jogador não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Erro interno ao remover jogador do time")
+    })
+    @PreAuthorize("hasAuthority('DIRIGENTE')")
     @DeleteMapping("/remover-jogador")
     public ResponseEntity<String> removerJogador(@RequestBody TimeJogadoresPKDTO dto) {
         timeService.removerJogadorDoTime(dto.getTimeId(), dto.getJogadorCpf());
